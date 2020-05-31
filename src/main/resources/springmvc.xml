@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <!--开启注解的扫描，只支持controller-->
+    <!--<context:component-scan base-package="com.sswang">-->
+        <!--<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>-->
+    <!--</context:component-scan>-->
+    <context:component-scan base-package="com.sswang.controller" />
+
+    <!--配置springmvc的视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+
+    <!--
+        配置多媒体文件解析器
+        spring mvc如果要接收 multipart/form-data 传输的数据， 配置如下
+    -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    </bean>
+
+    <!--配置静态资源-->
+    <mvc:resources mapping="/static/css" location="/static/css/**" />
+    <mvc:resources mapping="/static/images" location="/static/images/**" />
+    <mvc:resources mapping="/static/js" location="/static/js/**" />
+    <mvc:resources mapping="/static/sql" location="/static/sql/**" />
+
+    <!--注册自定义类型转换器-->
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <bean class="com.sswang.converter.String2DateConverter" />
+            </set>
+        </property>
+    </bean>
+
+    <!--声明注解驱动, 并引用自定义类型转换器-->
+    <mvc:annotation-driven conversion-service="conversionService"/>
+</beans>

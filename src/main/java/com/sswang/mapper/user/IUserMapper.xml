@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sswang.mapper.user.IUserMapper">
+    <select id="save" parameterType="user">
+        insert into users (userName,userPassword,userEmail,userProfilePhoto,userRegistrationTime,userBirthday,userTelephoneNumber,userNickname)
+        values  (#{userName},#{userPassword},#{userEmail},#{userProfilePhoto},#{userRegistrationTime},#{userBirthday},#{userTelephoneNumber},#{userNickname})
+</select>
+    <select id="findOneById" parameterType="integer" resultType="user">
+        select * from users where userId=#{id}
+    </select>
+    <select id="findByNameAndPwd" resultType="user">
+        select * from users where userName=#{username} and userPassword=#{password}
+    </select>
+</mapper>
+
+        <!--&#45;&#45; user_id;-->
+        <!--private String user_name;-->
+        <!--private String user_password;-->
+        <!--private String user_email;-->
+        <!--private String user_profile_photo;-->
+        <!--private Date user_registration_time;-->
+        <!--private Date user_birthday;-->
+        <!--private Integer user_telephone_number;-->
+        <!--private String user_nickname;-->
+        <!--&#45;&#45;-->
+        <!--insert into user (user_name,user_password,user_email,user_profile_photo,user_registration_time,user_birthday,user_telephone_number,user_nickname)-->
+        <!--values  (#{user_name},#{user_password},#{user_email,#{user_profile_photo},#{user_registration_time},#{user_birthday},#{user_telephone_number},#{user_nickname})-->

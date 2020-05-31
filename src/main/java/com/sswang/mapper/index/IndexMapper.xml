@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sswang.mapper.index.IndexMapper">
+
+
+    <select id="findAllLimitById" parameterType="ListForBlog" resultType="Blog">
+      select * from blog where blogId in
+        <foreach collection="ids" open="(" close=")" item="bid" separator=",">
+            #{bid}
+        </foreach>
+    </select>
+
+    <select id="findAllLabel" resultType="Label">
+        select * from labels
+    </select>
+
+    <select id="findAllSort" resultType="Sort">
+        select * from sorts
+    </select>
+    <select id="findSortCounts" resultType="sortCounts">
+        select sorts, count(1) as counts from blog group by sorts
+    </select>
+
+    <select id="findRecommendBlog" resultType="blog">
+        select * from blog order by blogViews desc limit 0,5
+    </select>
+</mapper>

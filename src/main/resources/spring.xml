@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!--spring的配置文件-->
+
+    <!--开启注解扫描，controller不被spring管理-->
+    <context:component-scan base-package="com.sswang">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+    </context:component-scan>
+
+    <!--配置属性扫描器-->
+    <context:property-placeholder location="classpath:jdbc.properties" />
+
+    <!--配置数据源-->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="jdbcUrl" value="${jdbc.url}" />
+        <property name="driverClass" value="${jdbc.driver}" />
+        <property name="user" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+    </bean>
+
+    <!--=========================整合Mybatis====================================-->
+    <!--
+        读取配置文件，生成字节输入流
+        InputStream in = Resources.getResourceAsStream("sqlMapConfig.xml");
+        获取Sqlession工厂
+        SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(in);
+        获取SqlSession
+        SqlSession sqlSession = factory.openSession(true);
+        获取AccountDao的代理对象
+        AccountDao accDao = sqlSession.getMapper(AccountDao.class);
+        xxxx数据库操作（增删改需要事务的支持（sqlSession.commit()）,查不需要）xxxxxxx
+        sqlSession.close();
+        in.close();
+    -->
+    <!--配置sqlSessionFactoryBean-->
+    <bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="configLocation" value="classpath:mybatis.xml" />
+    </bean>
+
+    <!--扫描mapper-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.sswang.mapper" />
+    </bean>
+
+    <!--配置事务管理器，并注入数据源-->
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <!--开启注解方式声明事务-->
+    <tx:annotation-driven transaction-manager="txManager" />
+
+
+</beans>

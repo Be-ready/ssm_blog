@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sswang.mapper.blog.BlogMapper">
+    <insert id="save" keyProperty="blogId" useGeneratedKeys="true" parameterType="blog">
+        insert into blog (userName, label, sorts, blogTitle, blogContent, blogImage, blogViews, blogCommentCount, blogCreateDate)
+            values (#{user}, #{label}, #{sorts}, #{blogTitle}, #{blogContent}, #{blogImage}, #{blogViews}, #{blogCommentCount}, #{blogCreateDate})
+    </insert>
+
+    <select id="findOneById" parameterType="Integer" resultType="Blog">
+        select * from blog where blogId=#{blogId}
+    </select>
+    
+    <update id="updateBlog" parameterType="blog">
+        update blog set userName=#{userName}, label=#{label}, sorts=#{sorts}, blogTitle=#{blogTitle}, blogContent=#{blogContent},
+               blogImage=#{blogImage}, blogViews=#{blogViews}, blogCommentCount=#{blogCommentCount}, blogCreateDate=#{blogCreateDate}
+               where blogId=#{blogId}
+    </update>
+
+    <!--获取blog表的数据总数-->
+    <select id="findAllNum" resultType="BlogNum" parameterType="Integer">
+        select count(1) as counts from blog
+    </select>
+
+    <!--用于分页-->
+    <select id="findByPage" parameterType="map" resultType="blog">
+        <if test="currPage!=null and currPage>=0">
+            select * from blog limit #{currPage}, #{size}
+        </if>
+    </select>
+</mapper>

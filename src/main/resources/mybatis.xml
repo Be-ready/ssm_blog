@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <!--开启驼峰命名法-->
+    <!--<settings>-->
+        <!--<setting name="mapUnderscoreToCamelCase" value="true" />-->
+    <!--</settings>-->
+
+    <!--<environments default="">-->
+        <!--<environment id="">-->
+            <!--<transactionManager type=""></transactionManager>-->
+            <!--<dataSource type=""></dataSource>-->
+        <!--</environment>-->
+    <!--</environments>-->
+
+    <!--通过<typeAliases>元素自定义别名(typeAlias和package属性)
+        typeAlias属性：type
+                实体类的权限定名
+             alias
+                自定义的别名
+        package作用：为某个包下所有类批量起别名
+            属性name：包名（全限定，com.sswang.entity）
+        为防止别名冲突，可以在指定类之前加上@Alias("自定义别名")
+    -->
+    <!--别名: 实体类的全限定名称-->
+    <typeAliases>  <!--类型别名-->
+        <!--<typeAlias type="com.sswang.entity.Account" alias="account"/>-->
+        <package name="com.sswang.entity" />
+    </typeAliases>
+
+    <!--mybatis加载mappers映射文件方式3种：
+        mappers是用来在mybatis初始化的时候，告诉mybatis需要引入哪些Mapper映射文件
+        mappers有2个属性：mapper和package
+        mapper有3个属性：<mapper class="" resource="" url="" />
+                url: 指定文件的完全路径
+                resource:  通过指定mybatis的xml文件位置加载映射文件（resource="sqlmap/User.xml"）
+                           要求：mapper接口名称和mapper映射文件名称相同，且放在同一个目录中
+                class: 通过mapper接口加载映射文件(class=""com.sswang.mapper.UserMapper)
+                       要求：mapper接口名称和mapper映射文件名称相同，且放在同一个目录中
+        package：
+            属性name:通过mapper接口所在包，批量加载该包下所有mapper接口
+                     使用package时，其下所有mapper接口都默认实现了别名（接口名/首字母小写接口名）
+                     要求：mapper接口名称和mapper映射文件名称相同，且放在同一个目录中
+    -->
+    <mappers> <!--映射器-->
+        <package name="com.sswang.mapper"/>
+    </mappers>
+
+
+</configuration>
